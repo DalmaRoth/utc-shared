@@ -1,6 +1,7 @@
 import * as Cesium from "cesium"
 import { getMapTile } from "../../api/airquality.js"
-import { initGoogleViewer } from "../cesium-init.js"
+import { initGoogleViewer, initReadMe } from "../cesium-init.js"
+import readme from "./README.md"
 
 const level = 2
 const x = 2
@@ -10,6 +11,7 @@ let showingAirQuality = false
 
 // *********** VIEWER **********************
 const { viewer } = await initGoogleViewer()
+initReadMe(readme)
 
 // *********** FUNCTIONS FOR UI **********************
 export const showAirQuality = async () => {

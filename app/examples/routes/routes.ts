@@ -1,8 +1,10 @@
 import * as Cesium from "cesium"
-import { initGoogleViewer } from "../cesium-init.js"
+import { initGoogleViewer, initReadMe } from "../cesium-init.js"
 import { computeRoutes, Route } from "../../api/routesapi"
+import readme from "./README.md"
 
 const { viewer } = await initGoogleViewer()
+initReadMe(readme)
 
 // *********** GLOBAL VARIABLES **********************
 let originPin: Cesium.Entity | undefined

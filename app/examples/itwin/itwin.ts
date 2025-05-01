@@ -1,10 +1,12 @@
 import * as Cesium from "cesium"
-import { initGoogleViewer } from "../cesium-init.js"
+import { initGoogleViewer, initReadMe } from "../cesium-init.js"
+import readme from "./README.md"
 
 Cesium.ITwinPlatform.defaultShareKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpVHdpbklkIjoiNTM1YTI0YTMtOWIyOS00ZTIzLWJiNWQtOWNlZGI1MjRjNzQzIiwiaWQiOiIyZmQxYTE5Yi1jMDE5LTRlODMtODQwNi0xNTVkNGQ2OGExNzgiLCJleHAiOjE3NDc3NzQ1Mzh9.fKkJOnligDevLSKplD2JJJ_udSMyARTQ45aSYegjRB0";
 
 const { viewer } = await initGoogleViewer()
+initReadMe(readme)
 
 export const showITwin = async () => {
   const iTwinId = "535a24a3-9b29-4e23-bb5d-9cedb524c743"

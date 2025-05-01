@@ -1,14 +1,15 @@
 // *********** SETUP **********************
 // Perform inital setup and import useful functions and variables
 import * as Cesium from "cesium"
-import { initGoogleViewer } from "../cesium-init.js"
+import { initGoogleViewer, initReadMe } from "../cesium-init.js"
 import { Place, searchText } from "../../api/placesapi"
-
+import readme from "./README.md"
 
 // *********** GLOBAL VARIABLES **********************
 let bounding_box = [999, 999, 999, -999, -999, -999, -999, 999]
 
 const { viewer, tileset } = await initGoogleViewer()
+initReadMe(readme)
 
 // *********** FUNCTIONS FOR UI **********************
 

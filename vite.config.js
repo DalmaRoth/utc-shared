@@ -8,7 +8,15 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
-    cesium()
+    cesium(),
+    {
+      name: "md-loader",
+      transform(code, id) {
+        if (id.endsWith(".md")) {
+          return `export default ${JSON.stringify(code)};`;
+        }
+      }
+    }
   ],
   build: {
     rollupOptions: {
