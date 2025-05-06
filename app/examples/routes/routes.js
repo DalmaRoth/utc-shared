@@ -9,7 +9,7 @@ initReadMe(readme)
 // *********** GLOBAL VARIABLES **********************
 let originPin
 let destinationPin
-let routePolylines
+let routePolylines = []
 var scene = viewer.scene
 var canvas = viewer.canvas
 let handler
