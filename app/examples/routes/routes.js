@@ -1,18 +1,18 @@
 import * as Cesium from "cesium"
 import { initGoogleViewer, initReadMe } from "../cesium-init.js"
-import { computeRoutes, Route } from "../../api/routesapi"
+import { computeRoutes } from "../../api/routesapi.js"
 import readme from "./README.md"
 
 const { viewer } = await initGoogleViewer()
 initReadMe(readme)
 
 // *********** GLOBAL VARIABLES **********************
-let originPin: Cesium.Entity | undefined
-let destinationPin: Cesium.Entity | undefined
-let routePolylines: Cesium.Entity[] = []
+let originPin
+let destinationPin
+let routePolylines
 var scene = viewer.scene
 var canvas = viewer.canvas
-let handler: Cesium.ScreenSpaceEventHandler | undefined
+let handler
 
 const pinBuilder = new Cesium.PinBuilder()
 
@@ -25,21 +25,21 @@ export const reset = () => {
   handler?.destroy()
 }
 
-async function get_route(originPin: Cesium.Entity, destinationPin: Cesium.Entity) {
+async function get_route(originPin, destinationPin) {
   const origin = coordinatesFromPin(originPin)
   const destination = coordinatesFromPin(destinationPin)
 
   try {
-    const { routes } = await computeRoutes(origin!, destination!)
+    const { routes } = await computeRoutes(origin, destination)
     drawPolyline(routes, origin, destination)
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching route:", error.message)
   }
 }
 
 // *********** MAP DRAWING FUNCTIONS **********************
 
-export const set_origin_destination = (isOrigin: boolean) => {
+export const set_origin_destination = (isOrigin) => {
   const handler = new Cesium.ScreenSpaceEventHandler(canvas)
   handler.setInputAction(function (movement) {
     var feature = scene.pick(movement.position)
@@ -60,10 +60,14 @@ export const set_origin_destination = (isOrigin: boolean) => {
 
       // Make sure there is only one pin of each type.
       if (isOrigin) {
-        originPin && viewer.entities.remove(originPin)
+        if (originPin) {
+          viewer.entities.remove(originPin)
+        }
         originPin = pin
       } else {
-        destinationPin && viewer.entities.remove(destinationPin)
+        if (destinationPin) {
+          viewer.entities.remove(destinationPin)
+        }
         destinationPin = pin
       }
 
@@ -77,7 +81,7 @@ export const set_origin_destination = (isOrigin: boolean) => {
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
 }
 
-function drawPolyline(routes: Route[], origin, destination) {
+function drawPolyline(routes, origin, destination) {
   // Remove old routes
   routePolylines.forEach(function (element) {
     viewer.entities.remove(element)
@@ -120,7 +124,7 @@ function drawPolyline(routes: Route[], origin, destination) {
   viewer.zoomTo(routePolylines)
 }
 
-function coordinatesFromPin(pin: Cesium.Entity) {
+function coordinatesFromPin(pin) {
   const cartesian = pin.position?.getValue()
   if (cartesian) {
     const cartographic = Cesium.Cartographic.fromCartesian(cartesian)

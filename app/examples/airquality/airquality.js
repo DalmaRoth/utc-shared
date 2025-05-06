@@ -19,7 +19,7 @@ export const showAirQuality = async () => {
     viewer.entities.add({
       rectangle: {
         coordinates: rectangle,
-        material: image.src as any,
+        material: image.src,
         classificationType: Cesium.ClassificationType.BOTH,
         granularity: Cesium.Math.RADIANS_PER_DEGREE * 60.0
       }
@@ -31,7 +31,7 @@ export const showAirQuality = async () => {
 async function requestTileImage(level, x, y) {
   const image = new Image()
   try {
-    const blob = (await getMapTile(level, x, y)) as Blob
+    const blob = (await getMapTile(level, x, y))
     const objectUrl = URL.createObjectURL(blob)
     image.src = objectUrl
   } catch (e) {

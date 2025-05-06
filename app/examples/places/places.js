@@ -2,7 +2,7 @@
 // Perform inital setup and import useful functions and variables
 import * as Cesium from "cesium"
 import { initGoogleViewer, initReadMe } from "../cesium-init.js"
-import { Place, searchText } from "../../api/placesapi"
+import { searchText } from "../../api/placesapi.js"
 import readme from "./README.md"
 
 // *********** GLOBAL VARIABLES **********************
@@ -13,7 +13,7 @@ initReadMe(readme)
 
 // *********** FUNCTIONS FOR UI **********************
 
-export const searchPlaces = async (query: string) => {
+export const searchPlaces = async (query) => {
   // Clear any previous results.
   viewer.entities.removeAll()
   try {
@@ -24,7 +24,7 @@ export const searchPlaces = async (query: string) => {
     if (response.places) {
       displayResults(response.places)
     }
-  } catch (error: any) {
+  } catch (error) {
     alert("Error: " + error.message)
   }
 }
@@ -57,7 +57,7 @@ export const changeClipState = (clip) => {
 
 // *********** MAP DRAWING FUNCTIONS **********************
 
-async function displayResults(places: Place[]) {
+async function displayResults(places) {
   // Use the places to draw several entities on the map.
   if (!places.length) {
     console.log("No results")
@@ -69,8 +69,8 @@ async function displayResults(places: Place[]) {
 
   // Loop through and get all the results.
   const pins = places.map(async (place) => {
-    const lat = place.location?.latitude as number
-    const long = place.location?.longitude as number
+    const lat = place.location?.latitude
+    const long = place.location?.longitude
 
     bounding_box = [
       Math.min(long, bounding_box[0]),
@@ -85,8 +85,8 @@ async function displayResults(places: Place[]) {
 
     return Promise.resolve(
       pinBuilder.fromUrl(
-        (place.iconMaskBaseUri + ".svg") as string,
-        Cesium.Color.fromCssColorString(place.iconBackgroundColor as string),
+        (place.iconMaskBaseUri + ".svg"),
+        Cesium.Color.fromCssColorString(place.iconBackgroundColor),
         48
       )
     ).then((image) => {
