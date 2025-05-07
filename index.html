@@ -12,10 +12,15 @@
       <li><a href="/app/examples/places/index.html">PLACES</a></li>
       <li><a href="/app/examples/routes/index.html">ROUTES</a></li>
       <li><a href="/app/examples/itwin/index.html">ITWIN</a></li>
+      <li><a href="/app/examples/itwin-private/index.html">ITWIN (PRIVATE)</a></li>
       <li><a href="/app/examples/airquality/index.html">AIR QUALITY</a></li>
     </ul>
     <ul>
       <li><a href="/app/sandbox/index.html">SANDBOX</a></li>
     </ul>
   </body>
+  <script type="module">
+    import { client } from "./app/itwin/auth"
+      client.handleSigninCallback();
+  </script>
 </html>

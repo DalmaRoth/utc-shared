@@ -23,7 +23,6 @@ export const initGoogleViewer = async () => {
     sceneModePicker: false,
     // geocoder must be Google for photorealistic tiles
     geocoder: Cesium.IonGeocodeProviderType.GOOGLE,
-    requestRenderMode: true
   })
 
   const tileset = await Cesium.createGooglePhotorealistic3DTileset({
@@ -59,25 +58,25 @@ export const initReadMe = async (readme: string) => {
     }
   
     // Create popup overlay
-    var popupOverlay = document.createElement("div")
+    const popupOverlay = document.createElement("div")
     popupOverlay.className = "popup-overlay"
     popupOverlay.id = "popupOverlay"
     document.body.appendChild(popupOverlay)
   
     // Create popup
-    var popup = document.createElement("div")
+    const popup = document.createElement("div")
     popup.className = "popup"
     popup.id = "popup"
     document.body.appendChild(popup)
   
     // Create close button
-    var closeButton = document.createElement("button")
+    const closeButton = document.createElement("button")
     closeButton.id = "closePopup"
     closeButton.textContent = "Close"
     popup.appendChild(closeButton)
   
     // Create popup content
-    var popupContent = document.createElement("div")
+    const popupContent = document.createElement("div")
     popupContent.id = "popupContent"
     popupContent.className = "popup-content"
     popup.appendChild(popupContent)
