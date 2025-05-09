@@ -1,11 +1,12 @@
 import * as Cesium from "cesium"
-import { initGoogleViewer, initReadMe } from "../cesium-init.js"
+import { init3dGoogleViewer } from "../../cesium-init.js"
+import { initReadMe } from "../readme.js"
 import readme from "./README.md"
 
 Cesium.ITwinPlatform.defaultShareKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpVHdpbklkIjoiNTM1YTI0YTMtOWIyOS00ZTIzLWJiNWQtOWNlZGI1MjRjNzQzIiwiaWQiOiIyZmQxYTE5Yi1jMDE5LTRlODMtODQwNi0xNTVkNGQ2OGExNzgiLCJleHAiOjE3NDc3NzQ1Mzh9.fKkJOnligDevLSKplD2JJJ_udSMyARTQ45aSYegjRB0";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpVHdpbklkIjoiNTM1YTI0YTMtOWIyOS00ZTIzLWJiNWQtOWNlZGI1MjRjNzQzIiwiaWQiOiIyZmQxYTE5Yi1jMDE5LTRlODMtODQwNi0xNTVkNGQ2OGExNzgiLCJleHAiOjE3NDc3NzQ1Mzh9.fKkJOnligDevLSKplD2JJJ_udSMyARTQ45aSYegjRB0"
 
-const { viewer } = await initGoogleViewer()
+const { viewer } = await init3dGoogleViewer()
 initReadMe(readme)
 
 export const showITwin = async () => {
@@ -41,22 +42,21 @@ async function addRealityMesh(iTwinId, realityMeshId) {
 }
 
 // HTML overlay for showing feature name on mouseover
-const nameOverlay = document.createElement("div");
-viewer.container.appendChild(nameOverlay);
-nameOverlay.className = "backdrop";
-nameOverlay.style.display = "none";
-nameOverlay.style.position = "absolute";
-nameOverlay.style.bottom = "0";
-nameOverlay.style.left = "0";
-nameOverlay.style["pointer-events"] = "none";
-nameOverlay.style.padding = "4px";
-nameOverlay.style.backgroundColor = "black";
-nameOverlay.style.whiteSpace = "pre-line";
-nameOverlay.style.fontSize = "12px";
-nameOverlay.style.color = "white";
+const nameOverlay = document.createElement("div")
+viewer.container.appendChild(nameOverlay)
+nameOverlay.className = "backdrop"
+nameOverlay.style.display = "none"
+nameOverlay.style.position = "absolute"
+nameOverlay.style.bottom = "0"
+nameOverlay.style.left = "0"
+nameOverlay.style["pointer-events"] = "none"
+nameOverlay.style.padding = "4px"
+nameOverlay.style.backgroundColor = "black"
+nameOverlay.style.whiteSpace = "pre-line"
+nameOverlay.style.fontSize = "12px"
+nameOverlay.style.color = "white"
 
-
-let selectedFeature;
+let selectedFeature
 
 const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
 handler.setInputAction(function (movement) {
@@ -69,33 +69,27 @@ handler.setInputAction(function (movement) {
   }
 }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
 
-
 function selectFeature(feature, movement) {
-  feature.color = Cesium.Color.clone(
-    Cesium.Color.fromCssColorString("#eeff41"),
-    feature.color,
-  );
-  selectedFeature = feature;
+  feature.color = Cesium.Color.clone(Cesium.Color.fromCssColorString("#eeff41"), feature.color)
+  selectedFeature = feature
 
-  nameOverlay.style.display = "block";
-  nameOverlay.style.bottom = `${
-    viewer.canvas.clientHeight - movement.endPosition.y
-  }px`;
-  nameOverlay.style.left = `${movement.endPosition.x}px`;
-  const element = feature.getProperty("element");
-  const subcategory = feature.getProperty("subcategory");
+  nameOverlay.style.display = "block"
+  nameOverlay.style.bottom = `${viewer.canvas.clientHeight - movement.endPosition.y}px`
+  nameOverlay.style.left = `${movement.endPosition.x}px`
+  const element = feature.getProperty("element")
+  const subcategory = feature.getProperty("subcategory")
   const message = `Element ID: ${element}
       Subcategory: ${subcategory}
-      Feature ID: ${feature.featureId}`;
-  nameOverlay.textContent = message;
+      Feature ID: ${feature.featureId}`
+  nameOverlay.textContent = message
 }
 
 function unselectFeature(feature) {
   if (!Cesium.defined(feature)) {
-    return;
+    return
   }
 
-  feature.color = Cesium.Color.clone(Cesium.Color.WHITE, feature.color);
-  selectedFeature = undefined;
-  nameOverlay.style.display = "none";
+  feature.color = Cesium.Color.clone(Cesium.Color.WHITE, feature.color)
+  selectedFeature = undefined
+  nameOverlay.style.display = "none"
 }

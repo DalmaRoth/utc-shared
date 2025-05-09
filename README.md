@@ -21,4 +21,4 @@ This README can be edited through the _README.md_ file in Markdown format. This 
 # Launching the App
 1. Launch a terminal at the root of this project
 2. Run the command `npm run start` from your terminal or powershell
-3. Open `http://localhost:5173` within a browser
+3. Open `http://localhost:3000` within a browser

@@ -1,9 +1,10 @@
 import * as Cesium from "cesium"
-import { initGoogleViewer, initReadMe } from "../cesium-init.js"
+import { init3dGoogleViewer } from "../../cesium-init.js"
+import { initReadMe } from "../readme.js"
 import { computeRoutes } from "../../api/routesapi.js"
 import readme from "./README.md"
 
-const { viewer } = await initGoogleViewer()
+const { viewer } = await init3dGoogleViewer()
 initReadMe(readme)
 
 // *********** GLOBAL VARIABLES **********************
@@ -15,7 +16,6 @@ var canvas = viewer.canvas
 let handler
 
 const pinBuilder = new Cesium.PinBuilder()
-
 
 // *********** UI FUNCTIONS **********************
 export const reset = () => {
@@ -54,7 +54,6 @@ export const set_origin_destination = (isOrigin) => {
           image: pinBuilder.fromText(isOrigin ? "O" : "D", Cesium.Color.GREEN, 48),
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
           heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-          
         }
       })
 

@@ -1,53 +1,35 @@
 import * as Cesium from "cesium"
-import { getMapTile } from "../../api/airquality.js"
-import { initGoogleViewer, initReadMe } from "../cesium-init.js"
+import { init2dGoogleViewer } from "../../cesium-init.js"
+import { initReadMe } from "../readme"
 import readme from "./README.md"
 
-const level = 2
-const x = 2
-const y = 1
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 let showingAirQuality = false
 
 // *********** VIEWER **********************
-const { viewer } = await initGoogleViewer()
+const { viewer } = await init2dGoogleViewer()
 initReadMe(readme)
 
 // *********** FUNCTIONS FOR UI **********************
 export const showAirQuality = async () => {
   if (!showingAirQuality) {
-    viewer.entities.add({
-      rectangle: {
-        coordinates: rectangle,
-        material: image.src,
-        classificationType: Cesium.ClassificationType.BOTH,
-        granularity: Cesium.Math.RADIANS_PER_DEGREE * 60.0
-      }
+    /**
+     * Google Places API v1: lookupHeatmapTile
+     * @see https://developers.google.com/maps/documentation/air-quality/reference/rest/v1/mapTypes.heatmapTiles/lookupHeatmapTile
+     */
+    const airQualityProvider = new Cesium.WebMapTileServiceImageryProvider({
+      url: `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/{TileMatrix}/{TileCol}/{TileRow}?key=${GOOGLE_MAPS_API_KEY}`,
+      layer: "Google_Air_Quality",
+      style: "default",
+      format: "image/jpeg",
+      tileMatrixSetID: "",
+      maximumLevel: 19,
+      credit: new Cesium.Credit("Google")
     })
+
+    const imageLayer = await Cesium.ImageryLayer.fromProviderAsync(airQualityProvider, { alpha: 0.5 })
+    viewer.imageryLayers.add(imageLayer)
     showingAirQuality = true
   }
 }
-
-async function requestTileImage(level, x, y) {
-  const image = new Image()
-  try {
-    const blob = (await getMapTile(level, x, y))
-    const objectUrl = URL.createObjectURL(blob)
-    image.src = objectUrl
-  } catch (e) {
-    console.error("Error requesting tile image", e)
-  }
-
-  return image
-}
-
-const tilingScheme = new Cesium.WebMercatorTilingScheme({
-  ellipsoid: viewer.scene.ellipsoid
-})
-
-async function getRectangle(level, x, y) {
-  return tilingScheme.tileXYToRectangle(x, y, level)
-}
-
-const image = await requestTileImage(level, x, y)
-const rectangle = await getRectangle(level, x, y)

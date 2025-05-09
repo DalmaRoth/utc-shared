@@ -1,14 +1,15 @@
 // *********** SETUP **********************
 // Perform inital setup and import useful functions and variables
 import * as Cesium from "cesium"
-import { initGoogleViewer, initReadMe } from "../cesium-init.js"
+import { init3dGoogleViewer } from "../../cesium-init.js"
+import { initReadMe } from "../readme.js"
 import { searchText } from "../../api/placesapi.js"
 import readme from "./README.md"
 
 // *********** GLOBAL VARIABLES **********************
 let bounding_box = [999, 999, 999, -999, -999, -999, -999, 999]
 
-const { viewer, tileset } = await initGoogleViewer()
+const { viewer, tileset } = await init3dGoogleViewer()
 initReadMe(readme)
 
 // *********** FUNCTIONS FOR UI **********************
@@ -84,11 +85,7 @@ async function displayResults(places) {
     ]
 
     return Promise.resolve(
-      pinBuilder.fromUrl(
-        (place.iconMaskBaseUri + ".svg"),
-        Cesium.Color.fromCssColorString(place.iconBackgroundColor),
-        48
-      )
+      pinBuilder.fromUrl(place.iconMaskBaseUri + ".svg", Cesium.Color.fromCssColorString(place.iconBackgroundColor), 48)
     ).then((image) => {
       // Note: the ? allows the  property to be missing for a particular place, and simply returns a blank string.
       return viewer.entities.add({
