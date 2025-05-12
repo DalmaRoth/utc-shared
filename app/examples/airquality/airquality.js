@@ -22,7 +22,7 @@ export const showAirQuality = async () => {
       url: `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/{TileMatrix}/{TileCol}/{TileRow}?key=${GOOGLE_MAPS_API_KEY}`,
       layer: "Google_Air_Quality",
       style: "default",
-      format: "image/jpeg",
+      format: "image/png",
       tileMatrixSetID: "",
       maximumLevel: 19,
       credit: new Cesium.Credit("Google")

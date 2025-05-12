@@ -47,22 +47,6 @@ export const init3dGoogleViewer = async () => {
 }
 
 export const init2dGoogleViewer = async () => {
-  // **************** MAP INITIALIZATION ***************************************
-  // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
-  // NOTE: baseLayerPicker on the viewer must be false, and a Google 2D or 3D map must be used.
-  // Google API results can only be shared on Google maps due to terms of service
-  const viewer = new Cesium.Viewer("cesiumContainer", {
-    // can turn timeline and animation back on if dealing with time-dependent data
-    timeline: false,
-    animation: false,
-    // baseLayerPicker must be false to comply with Google API terms of service
-    baseLayerPicker: false,
-    // sceneModePicker is extra clutter, not really needed
-    sceneModePicker: false,
-    // geocoder must be Google for photorealistic tiles
-    geocoder: Cesium.IonGeocodeProviderType.GOOGLE
-  })
-
   // Obtain a session token for the Google Maps API
   const response = axios.post(`https://tile.googleapis.com/v1/createSession?key=${GOOGLE_MAPS_API_KEY}`, {
     mapType: "satellite",
@@ -73,14 +57,30 @@ export const init2dGoogleViewer = async () => {
 
   const google2dTileProvider = new Cesium.WebMapTileServiceImageryProvider({
     url: `https://tile.googleapis.com/v1/2dtiles/{TileMatrix}/{TileCol}/{TileRow}?session=${sessionToken}&key=${GOOGLE_MAPS_API_KEY}`,
-    layer: "USGSShadedReliefOnly",
+    layer: "Google_Maps_2D",
     style: "default",
-    format: "image/jpeg",
+    format: "image/png",
     tileMatrixSetID: "",
     maximumLevel: 19,
     credit: new Cesium.Credit("Google")
   })
-  viewer.imageryLayers.addImageryProvider(google2dTileProvider)
+
+  // **************** MAP INITIALIZATION ***************************************
+  // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
+  // NOTE: baseLayerPicker on the viewer must be false, and a Google 2D or 3D map must be used.
+  // Google API results can only be shared on Google maps due to terms of service
+  const viewer = new Cesium.Viewer("cesiumContainer", {
+    // can turn timeline and animation back on if dealing with time-dependent data
+    timeline: false,
+    animation: false,
+    baseLayer: new Cesium.ImageryLayer(google2dTileProvider),
+    // baseLayerPicker must be false to comply with Google API terms of service
+    baseLayerPicker: false,
+    // sceneModePicker is extra clutter, not really needed
+    sceneModePicker: false,
+    // geocoder must be Google for photorealistic tiles
+    geocoder: Cesium.IonGeocodeProviderType.GOOGLE
+  })
 
   // Add accreditation for Google Maps API, do not remove
   const credit = new Cesium.Credit(
