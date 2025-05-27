@@ -18,9 +18,14 @@
       <button id="help-button"><i class="fa-brands fa-readme"></i> README</button>
       <!-- Additional Controls - Add as needed -->
       <button id="custom-button">Custom Button</button>
+      <button id="time-button"><i class="fa-solid fa-clock-rotate-left"></i></button>
+      <div id="timeslicer">        
+        <input type="range" min="0.0" max="64.0" step="0.1" data-bind="value: maximumScreenSpaceError, valueUpdate: 'input'">
+        <input type="text" size="5" data-bind="value: time">
+      </div>
     </div>
     <script type="module">
-      import { doSomething } from "./sandbox"
+      import { doSomething } from "./fire"
       // *********** CONTROL HANDLING **********************
       // Handle button clicks
       // Add button click handlers for any custom controls
